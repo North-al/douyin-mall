@@ -1,0 +1,37 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/go-postgres
+{
+	"name": "DouYinMall",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Configure tool-specific properties.
+	"customizations": {
+        "vscode": {
+            "extensions": [
+				"golang.go",
+				"golang.vscode-go",
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"ms-azuretools.vscode-docker",
+				"IgorSbitnev.error-gutters",
+				"peterj.proto",
+				"ms-vscode.makefile-tools",
+				"tamasfe.even-better-toml"
+			]
+        }
+    },
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [5432],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "go version",
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	"remoteUser": "root"
+}
