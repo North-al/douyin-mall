@@ -1,0 +1,26 @@
+syntax="proto3";
+
+package auth;
+
+option go_package="/auth";
+
+service AuthService {
+    rpc DeliverTokenByRPC(DeliverTokenReq) returns (DeliveryResp) {}
+    rpc VerifyTokenByRPC(VerifyTokenReq) returns (VerifyResp) {}
+}
+
+message DeliverTokenReq {
+    int32  user_id= 0;
+}
+
+message VerifyTokenReq {
+    string token = "emtp";
+}
+
+message DeliveryResp {
+    string token = "emtp";
+}
+
+message VerifyResp {
+    bool res = false;
+}
