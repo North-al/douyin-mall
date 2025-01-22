@@ -1,25 +1,32 @@
 version: '3.8'
 
+# 添加网络定义
+networks:
+  douyin-mall:
+    driver: bridge
+
 volumes:
   mysql_data:
   redis_data:
 
+
 services:
   app:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     volumes:
       - ../..:/workspaces:cached
-      
+
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
 
     # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    network_mode: service:mysql
-
+    # network_mode: service:mysql
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
     # (Adding the "ports" property to this file will not forward from a Codespace.)
+    networks:
+      - douyin-mall
 
   mysql:
     image: mysql:8.0
@@ -33,6 +40,8 @@ services:
       MYSQL_PASSWORD: 123456
       MYSQL_DATABASE: douyin_mall
       TZ: Asia/Shanghai
+    networks:
+      - douyin-mall
 
   redis:
     image: redis:latest
@@ -40,3 +49,14 @@ services:
       - 6389:6379
     volumes:
       - redis_data:/data
+    networks:
+      - douyin-mall
+
+  consul:
+    image: hashicorp/consul
+    ports:
+      - "8500:8500" # HTTP UI 和 API 端口
+      - "8600:8600/udp" # DNS 接口
+    command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
+    networks:
+      - douyin-mall

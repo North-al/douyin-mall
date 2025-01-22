@@ -4,12 +4,16 @@ import (
 	"net"
 	"time"
 
+	"github.com/North-al/douyin-mall/app/auth/conf"
+	"github.com/North-al/douyin-mall/rpc_gen/kitex_gen/auth/authservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
-	"github.com/North-al/douyin-mall/app/auth/conf"
-	"github.com/North-al/douyin-mall/rpc_gen/kitex_gen/auth/authservice"
+	"github.com/kr/pretty"
+
+	"github.com/cloudwego/kitex/pkg/registry"
+	consul "github.com/kitex-contrib/registry-consul"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -17,11 +21,21 @@ import (
 func main() {
 	opts := kitexInit()
 
+	// 注册到 Consul
+	r, err := registerToConsul()
+	if err != nil {
+		klog.Fatalf("Failed to register to Consul: %v", err)
+		return
+	}
+	opts = append(opts, server.WithRegistry(r))
+
+	// 创建并启动服务
 	svr := authservice.NewServer(new(AuthServiceImpl), opts...)
 
-	err := svr.Run()
-	if err != nil {
-		klog.Error(err.Error())
+	pretty.Printf("Starting auth service...\n")
+	if err := svr.Run(); err != nil {
+		klog.Fatalf("Service stopped with error: %v", err)
+		return
 	}
 }
 
@@ -56,4 +70,14 @@ func kitexInit() (opts []server.Option) {
 		asyncWriter.Sync()
 	})
 	return
+}
+
+func registerToConsul() (registry.Registry, error) {
+	r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
+	pretty.Printf("Register to Consul: %+v\n", r)
+	if err != nil {
+		klog.Errorf("Failed to register to Consul: %v", err)
+		return nil, err
+	}
+	return r, nil
 }
