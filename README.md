@@ -1,13 +1,13 @@
 # douyin-mall
 
-基于 Kitex 框架的抖音商城微服务项目。
+字节青训营，基于 Kitex 框架的抖音商城微服务项目。项目地址：[https://github.com/North-al/douyin-mall](https://github.com/North-al/douyin-mall)
 
 ## 项目结构
 
 ```
 douyin-mall
-├── app                 # 微服务应用目录
-│   ├── auth           # 认证服务
+├── app               # 微服务应用目录
+│   ├── auth          # 认证服务
 │   │   ├── conf      # 配置文件
 │   │   ├── biz       # 业务逻辑
 │   │   └── main.go   # 服务入口
@@ -17,7 +17,7 @@ douyin-mall
 │   │   │   └── query # 数据库操作封装
 │   │   └── dal       # 数据访问层
 │   └── ...           # 其他服务
-├── idl                # 接口定义文件目录
+├── idl               # 接口定义文件目录
 └── rpc_gen           # RPC 生成代码目录
     ├── kitex_gen     # Kitex 生成的代码
     └── rpc           # RPC 相关代码
@@ -84,5 +84,9 @@ app/*/conf/
 2. 使用 GORM 进行数据库操作
 3. 遵循项目的目录结构和命名规范
 4. 确保添加适当的日志和错误处理
-```
 
+## 参考资料
+
+- [Kitex 官方文档](https://www.cloudwego.io/docs/kitex/)
+- [Consul 官方文档](https://www.consul.io/docs)
+- [GORM 官方文档](https://gorm.io/docs)
