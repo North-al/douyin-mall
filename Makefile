@@ -1,5 +1,7 @@
 .PHONY: gen-rpc-client-auth
 .PHONY: gen-rpc-server-auth
+.PHONY: gen-rpc-client-user
+.PHONY: gen-rpc-server-user
 
 # 定义变量以便于维护和修改
 RPC_GEN_DIR := rpc_gen
@@ -25,3 +27,22 @@ gen-rpc-server-auth:
 		--pass "-use $(MODULE)/rpc_gen/kitex_gen" \
 		-I ../../idl \
 		--idl ../../idl/auth.proto
+
+gen-rpc-client-user:
+	cd $(RPC_GEN_DIR) && \
+	cwgo client \
+		--type RPC \
+		--service user \
+		--module $(MODULE)/rpc_gen \
+		-I ../idl \
+		--idl ../idl/user.proto
+
+gen-rpc-server-user:
+	cd app/user && \
+	cwgo server \
+		--type RPC \
+		--service user \
+		--module $(MODULE)/app/user \
+		--pass "-use $(MODULE)/rpc_gen/kitex_gen" \
+		-I ../../idl \
+		--idl ../../idl/user.proto
