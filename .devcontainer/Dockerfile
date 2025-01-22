@@ -8,6 +8,7 @@ FROM mcr.microsoft.com/devcontainers/go:1-1.23-bookworm
 # USER vscode
 # RUN go get -x <your-dependency-or-tool>
 # USER root
-
+RUN apt update && apt install -y protobuf-compiler
+RUN go install github.com/cloudwego/cwgo@latest
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
