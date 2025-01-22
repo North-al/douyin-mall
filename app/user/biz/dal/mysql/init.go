@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"github.com/North-al/douyin-mall/app/user/conf"
-
+	"github.com/North-al/douyin-mall/app/user/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -19,6 +19,12 @@ func Init() {
 			SkipDefaultTransaction: true,
 		},
 	)
+	if err != nil {
+		panic(err)
+	}
+
+	// 自动迁移
+	err = DB.AutoMigrate(&model.User{})
 	if err != nil {
 		panic(err)
 	}

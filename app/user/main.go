@@ -4,18 +4,20 @@ import (
 	"net"
 	"time"
 
+	"github.com/North-al/douyin-mall/app/user/biz/dal"
+	"github.com/North-al/douyin-mall/app/user/conf"
+	"github.com/North-al/douyin-mall/rpc_gen/kitex_gen/user/userservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
-	"github.com/North-al/douyin-mall/app/user/conf"
-	"github.com/North-al/douyin-mall/rpc_gen/kitex_gen/user/userservice"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
 	opts := kitexInit()
+	dal.Init()
 
 	svr := userservice.NewServer(new(UserServiceImpl), opts...)
 
