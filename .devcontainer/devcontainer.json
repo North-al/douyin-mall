@@ -21,7 +21,8 @@
 				"IgorSbitnev.error-gutters",
 				"peterj.proto",
 				"ms-vscode.makefile-tools",
-				"tamasfe.even-better-toml"
+				"tamasfe.even-better-toml",
+				"yzhang.markdown-all-in-one"
 			]
         }
     },

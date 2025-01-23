@@ -5,12 +5,16 @@ import (
 	"time"
 
 	"github.com/North-al/douyin-mall/app/user/biz/dal"
+	"github.com/North-al/douyin-mall/app/user/biz/rpc"
 	"github.com/North-al/douyin-mall/app/user/conf"
 	"github.com/North-al/douyin-mall/rpc_gen/kitex_gen/user/userservice"
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/cloudwego/kitex/pkg/registry"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
+	consul "github.com/kitex-contrib/registry-consul"
+	"github.com/kr/pretty"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -18,10 +22,22 @@ import (
 func main() {
 	opts := kitexInit()
 	dal.Init()
+	// 注册到 Consul
+	r, err := registerToConsul()
+	if err != nil {
+		klog.Fatalf("Failed to register to Consul: %v", err)
+		return
+	}
+	opts = append(opts, server.WithRegistry(r))
+
+	rpc.InitAuthClient(&rpc.AuthClientConfig{
+		ServiceName: "auth",
+		ConsulAddr:  conf.GetConf().Registry.RegistryAddress[0],
+	})
 
 	svr := userservice.NewServer(new(UserServiceImpl), opts...)
 
-	err := svr.Run()
+	err = svr.Run()
 	if err != nil {
 		klog.Error(err.Error())
 	}
@@ -58,4 +74,14 @@ func kitexInit() (opts []server.Option) {
 		asyncWriter.Sync()
 	})
 	return
+}
+
+func registerToConsul() (registry.Registry, error) {
+	r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
+	pretty.Printf("Register to Consul: %+v\n", r)
+	if err != nil {
+		klog.Errorf("Failed to register to Consul: %v", err)
+		return nil, err
+	}
+	return r, nil
 }

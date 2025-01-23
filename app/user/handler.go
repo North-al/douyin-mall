@@ -14,14 +14,14 @@ type UserServiceImpl struct{}
 
 // Register implements the UserServiceImpl interface.
 func (s *UserServiceImpl) Register(ctx context.Context, req *user.RegisterReq) (resp *user.RegisterResp, err error) {
-	resp, err = service.NewRegisterService(ctx, query.NewUserQuery(mysql.DB)).Run(req)
+	resp, err = service.NewRegisterService(ctx, query.NewUserQuery(ctx, mysql.DB)).Run(req)
 
 	return resp, err
 }
 
 // Login implements the UserServiceImpl interface.
 func (s *UserServiceImpl) Login(ctx context.Context, req *user.LoginReq) (resp *user.LoginResp, err error) {
-	resp, err = service.NewLoginService(ctx).Run(req)
+	resp, err = service.NewLoginService(ctx, query.NewUserQuery(ctx, mysql.DB)).Run(req)
 
 	return resp, err
 }

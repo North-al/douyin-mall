@@ -34,7 +34,7 @@ func TestRegister_Run(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	userQuery := query.NewUserQuery(mysql.DB)
+	userQuery := query.NewUserQuery(ctx, mysql.DB)
 	s := NewRegisterService(ctx, userQuery)
 	// init req and assert value
 

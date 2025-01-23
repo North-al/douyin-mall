@@ -84,6 +84,7 @@ func initConf() {
 	}
 	conf.Env = GetEnv()
 	pretty.Printf("----------------------------------\n")
+	pretty.Printf("service Name: %+v\n", conf.Kitex.Service)
 	pretty.Printf("mysql: %+v\n", conf.MySQL)
 	pretty.Printf("redis: %+v\n", conf.Redis)
 	pretty.Printf("kitex: %+v\n", conf.Kitex)

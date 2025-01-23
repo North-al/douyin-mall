@@ -1,6 +1,7 @@
 package query
 
 import (
+	"context"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -10,15 +11,16 @@ import (
 )
 
 type UserQuery struct {
-	db *gorm.DB
+	ctx context.Context
+	db  *gorm.DB
 }
 
-func NewUserQuery(db *gorm.DB) *UserQuery {
-	return &UserQuery{db: db}
+func NewUserQuery(ctx context.Context, db *gorm.DB) *UserQuery {
+	return &UserQuery{ctx: ctx, db: db}
 }
 
 func (q *UserQuery) GetUserByEmail(email string) (user model.User, err error) {
-	err = q.db.Where("email = ?", email).First(&user).Error
+	err = q.db.WithContext(q.ctx).Model(&model.User{}).Where("email = ?", email).First(&user).Error
 	return
 }
 
