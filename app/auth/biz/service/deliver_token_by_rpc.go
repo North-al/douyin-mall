@@ -18,8 +18,7 @@ func NewDeliverTokenByRPCService(ctx context.Context) *DeliverTokenByRPCService 
 
 // Run create note info
 func (s *DeliverTokenByRPCService) Run(req *auth.DeliverTokenReq) (resp *auth.DeliveryResp, err error) {
-	// Finish your business logic.
-	// req.UserId
+	// TODO: 缺少redis缓存token信息
 
 	claims := jwt.MapClaims{
 		"user_id": req.UserId,
