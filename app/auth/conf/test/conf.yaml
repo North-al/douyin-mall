@@ -21,3 +21,7 @@ redis:
   username: ""
   password: ""
   db: 0
+
+jwt:
+  secret: "your-256-bit-secret"
+  expire_time: 24 # 过期时间 (小时)

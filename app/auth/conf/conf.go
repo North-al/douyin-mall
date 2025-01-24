@@ -23,6 +23,7 @@ type Config struct {
 	MySQL    MySQL    `yaml:"mysql"`
 	Redis    Redis    `yaml:"redis"`
 	Registry Registry `yaml:"registry"`
+	JWT      JWT      `yaml:"jwt"`
 }
 
 type MySQL struct {
@@ -59,6 +60,11 @@ type RegistryConfig struct {
 	Password string `yaml:"Password"`
 }
 
+type JWT struct {
+	Secret     string `yaml:"secret"`
+	ExpireTime int    `yaml:"expire_time"`
+}
+
 // GetConf gets configuration instance
 func GetConf() *Config {
 	once.Do(initConf)
@@ -89,6 +95,7 @@ func initConf() {
 	pretty.Printf("redis: %+v\n", conf.Redis)
 	pretty.Printf("kitex: %+v\n", conf.Kitex)
 	pretty.Printf("registry: %+v\n", conf.Registry)
+	pretty.Printf("jwt: %+v\n", conf.JWT)
 	pretty.Printf("env: %+v\n", conf.Env)
 	pretty.Printf("----------------------------------\n")
 
@@ -97,7 +104,7 @@ func initConf() {
 func GetEnv() string {
 	e := os.Getenv("GO_ENV")
 	if len(e) == 0 {
-		return "test"
+		return "dev"
 	}
 	return e
 }
