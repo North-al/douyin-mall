@@ -53,7 +53,7 @@ services:
       - douyin-mall
 
   consul:
-    image: hashicorp/consul
+    image: hashicorp/consul:1.20
     ports:
       - "8500:8500" # HTTP UI 和 API 端口
       - "8600:8600/udp" # DNS 接口
