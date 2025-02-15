@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/North-al/douyin-mall/app/user/biz/dal"
+	"github.com/North-al/douyin-mall/app/user/biz/middleware"
 	"github.com/North-al/douyin-mall/app/user/biz/rpc"
 	"github.com/North-al/douyin-mall/app/user/conf"
 	"github.com/North-al/douyin-mall/rpc_gen/kitex_gen/user/userservice"
@@ -35,6 +36,7 @@ func main() {
 		ConsulAddr:  conf.GetConf().Registry.RegistryAddress[0],
 	})
 
+	opts = append(opts, server.WithMiddleware(middleware.AuthMiddleware))
 	svr := userservice.NewServer(new(UserServiceImpl), opts...)
 
 	err = svr.Run()

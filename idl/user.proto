@@ -30,6 +30,7 @@ message LoginResp {
 }
 
 message UserInfoReq {
+    string token = 1;
 }
 
 message UserInfoResp {

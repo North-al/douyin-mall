@@ -24,7 +24,7 @@ func (q *UserQuery) GetUserByEmail(email string) (user model.User, err error) {
 	return
 }
 
-func (q *UserQuery) GetUserById(id int64) (user model.User, err error) {
+func (q *UserQuery) GetUserById(id int32) (user model.User, err error) {
 	err = q.db.WithContext(q.ctx).Model(&model.User{}).Where("id = ?", id).First(&user).Error
 	return
 }
