@@ -34,11 +34,13 @@ func (s *VerifyTokenByRPCService) Run(req *auth.VerifyTokenReq) (resp *auth.Veri
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
-	fmt.Println("userid", claims["user_id"])
-	result, err := redis.RedisClient.Get(s.ctx, fmt.Sprintf("user_token_%d", claims["user_id"])).Result()
+	result, err := redis.RedisClient.Get(s.ctx, fmt.Sprintf("user_token_%d", (int)(claims["user_id"].(float64)))).Result()
 	if err != nil {
 		return nil, errors.New(fmt.Errorf("get token from redis failed, err: %v", err).Error())
 	}
+
+	fmt.Println("result: ", result)
+	fmt.Println("req.Token: ", req.Token)
 
 	if result != req.Token {
 		resp.Res = false
@@ -47,7 +49,7 @@ func (s *VerifyTokenByRPCService) Run(req *auth.VerifyTokenReq) (resp *auth.Veri
 
 	if ok && token.Valid {
 		resp.Res = true
-		return resp, errors.New("token is invalid")
+		return resp, nil
 	}
 
 	resp.Res = false

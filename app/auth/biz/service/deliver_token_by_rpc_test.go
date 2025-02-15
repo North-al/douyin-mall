@@ -4,16 +4,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/North-al/douyin-mall/app/auth/biz/dal"
-	"github.com/North-al/douyin-mall/pkg"
 	auth "github.com/North-al/douyin-mall/rpc_gen/kitex_gen/auth"
 )
 
+var deliveredToken string
+
 func TestDeliverTokenByRPC_Run(t *testing.T) {
-	build := pkg.NewBuildTestEnv("test")
-	build.SetTestEnv()
-	build.SetWorkDir()
-	dal.Init()
+	InitTestEnv()
 
 	ctx := context.Background()
 	s := NewDeliverTokenByRPCService(ctx)
@@ -23,9 +20,10 @@ func TestDeliverTokenByRPC_Run(t *testing.T) {
 		UserId: 1,
 	}
 	resp, err := s.Run(req)
-	t.Logf("err: %v", err)
-	t.Logf("resp: %v", resp)
+	if err != nil {
+		t.Fatalf("deliver token failed: %v", err)
+	}
 
-	// todo: edit your unit test
-
+	deliveredToken = resp.Token
+	t.Logf("delivered token: %v", deliveredToken)
 }
