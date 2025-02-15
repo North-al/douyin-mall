@@ -2,8 +2,10 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"time"
 
+	"github.com/North-al/douyin-mall/app/auth/biz/dal/redis"
 	"github.com/North-al/douyin-mall/app/auth/conf"
 	auth "github.com/North-al/douyin-mall/rpc_gen/kitex_gen/auth"
 	"github.com/golang-jwt/jwt/v5"
@@ -18,8 +20,6 @@ func NewDeliverTokenByRPCService(ctx context.Context) *DeliverTokenByRPCService 
 
 // Run create note info
 func (s *DeliverTokenByRPCService) Run(req *auth.DeliverTokenReq) (resp *auth.DeliveryResp, err error) {
-	// TODO: 缺少redis缓存token信息
-
 	claims := jwt.MapClaims{
 		"user_id": req.UserId,
 		"exp":     time.Now().Add(time.Hour * time.Duration(conf.GetConf().JWT.ExpireTime)).Unix(), // 过期时间
@@ -31,6 +31,8 @@ func (s *DeliverTokenByRPCService) Run(req *auth.DeliverTokenReq) (resp *auth.De
 	if err != nil {
 		return nil, err
 	}
+
+	redis.RedisClient.Set(s.ctx, fmt.Sprintf("user_token_%d", req.UserId), tokenString, time.Hour*time.Duration(conf.GetConf().JWT.ExpireTime))
 
 	return &auth.DeliveryResp{Token: tokenString}, nil
 }

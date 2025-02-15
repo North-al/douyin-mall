@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"fmt"
+
 	"github.com/North-al/douyin-mall/app/auth/conf"
 	"github.com/cloudwego/kitex/pkg/klog"
 
@@ -24,7 +26,6 @@ func Init() {
 	klog.Info("DB: ", DB)
 
 	if err != nil {
-		klog.Error("Init mysql failed: %v", err)
-		panic(err)
+		panic(fmt.Errorf("Init mysql failed: %v", err))
 	}
 }

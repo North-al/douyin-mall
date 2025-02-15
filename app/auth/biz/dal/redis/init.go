@@ -2,9 +2,11 @@ package redis
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/redis/go-redis/v9"
 	"github.com/North-al/douyin-mall/app/auth/conf"
+	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/redis/go-redis/v9"
 )
 
 var (
@@ -18,7 +20,10 @@ func Init() {
 		Password: conf.GetConf().Redis.Password,
 		DB:       conf.GetConf().Redis.DB,
 	})
+
+	klog.Info("RedisClient: ", RedisClient)
+
 	if err := RedisClient.Ping(context.Background()).Err(); err != nil {
-		panic(err)
+		panic(fmt.Errorf("Init redis failed: %v", err))
 	}
 }

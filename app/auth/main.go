@@ -4,6 +4,7 @@ import (
 	"net"
 	"time"
 
+	"github.com/North-al/douyin-mall/app/auth/biz/dal"
 	"github.com/North-al/douyin-mall/app/auth/conf"
 	"github.com/North-al/douyin-mall/rpc_gen/kitex_gen/auth/authservice"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -19,6 +20,7 @@ import (
 )
 
 func main() {
+	dal.Init()
 	opts := kitexInit()
 
 	// 注册到 Consul

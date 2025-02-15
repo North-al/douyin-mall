@@ -2,8 +2,10 @@ package service
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
+	"github.com/North-al/douyin-mall/app/auth/biz/dal/redis"
 	"github.com/North-al/douyin-mall/app/auth/conf"
 	auth "github.com/North-al/douyin-mall/rpc_gen/kitex_gen/auth"
 	"github.com/golang-jwt/jwt/v5"
@@ -19,8 +21,6 @@ func NewVerifyTokenByRPCService(ctx context.Context) *VerifyTokenByRPCService {
 // Run create note info
 func (s *VerifyTokenByRPCService) Run(req *auth.VerifyTokenReq) (resp *auth.VerifyResp, err error) {
 	resp = &auth.VerifyResp{}
-	// TODO: 缺少redis对比token信息
-
 	token, err := jwt.Parse(req.Token, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
@@ -33,9 +33,21 @@ func (s *VerifyTokenByRPCService) Run(req *auth.VerifyTokenReq) (resp *auth.Veri
 		return resp, err
 	}
 
-	if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+	claims, ok := token.Claims.(jwt.MapClaims)
+	fmt.Println("userid", claims["user_id"])
+	result, err := redis.RedisClient.Get(s.ctx, fmt.Sprintf("user_token_%d", claims["user_id"])).Result()
+	if err != nil {
+		return nil, errors.New(fmt.Errorf("get token from redis failed, err: %v", err).Error())
+	}
+
+	if result != req.Token {
+		resp.Res = false
+		return resp, errors.New("token is invalid")
+	}
+
+	if ok && token.Valid {
 		resp.Res = true
-		return resp, nil
+		return resp, errors.New("token is invalid")
 	}
 
 	resp.Res = false
