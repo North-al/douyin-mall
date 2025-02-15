@@ -42,7 +42,7 @@ func (s *LoginService) Run(req *user.LoginReq) (resp *user.LoginResp, err error)
 
 	pretty.Printf("authResp: %+v\n", authResp)
 
-	resp.UserId = 1
+	resp.UserId = int32(queryUser.ID)
 
 	return
 }
