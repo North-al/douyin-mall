@@ -1,0 +1,5 @@
+# 忽略app下面的conf文件目录
+app/**/user/conf/*
+/app/auth/conf/
+
+.idea
