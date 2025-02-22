@@ -2,6 +2,9 @@ go 1.23.4
 
 use (
 	./app/auth
+	./app/checkout
+	./app/payment
+
 	./app/user
 	./pkg
 	./rpc_gen

@@ -4,7 +4,6 @@ package payment;
 
 option go_package = "payment";
 
-
 service PaymentService {
   rpc Charge(ChargeReq) returns (ChargeResp) {}
 }
