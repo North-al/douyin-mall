@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"fmt"
+
 	"github.com/North-al/douyin-mall/app/user/conf"
 	"github.com/North-al/douyin-mall/app/user/model"
 	"gorm.io/driver/mysql"
@@ -13,6 +15,7 @@ var (
 )
 
 func Init() {
+	fmt.Println(conf.GetConf().MySQL.DSN)//调试打印数据库连接信息
 	DB, err = gorm.Open(mysql.Open(conf.GetConf().MySQL.DSN),
 		&gorm.Config{
 			PrepareStmt:            true,
