@@ -4,13 +4,12 @@ import (
 	"net"
 	"time"
 
-	"github.com/North-al/douyin-mall/app/checkout/conf"
-	"github.com/North-al/douyin-mall/rpc_gen/kitex_gen/checkout/checkoutservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
-	consul "github.com/kitex-contrib/registry-consul"
+	"github.com/North-al/douyin-mall/app/order/conf"
+	"github.com/North-al/douyin-mall/rpc_gen/kitex_gen/order/orderservice"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -18,7 +17,7 @@ import (
 func main() {
 	opts := kitexInit()
 
-	svr := checkoutservice.NewServer(new(CheckoutServiceImpl), opts...)
+	svr := orderservice.NewServer(new(OrderServiceImpl), opts...)
 
 	err := svr.Run()
 	if err != nil {
@@ -32,12 +31,7 @@ func kitexInit() (opts []server.Option) {
 	if err != nil {
 		panic(err)
 	}
-	r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
-	if err != nil {
-		klog.Fatal(err)
-	}
-
-	opts = append(opts, server.WithServiceAddr(addr), server.WithRegistry(r))
+	opts = append(opts, server.WithServiceAddr(addr))
 
 	// service info
 	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
