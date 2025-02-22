@@ -1,11 +1,13 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+ // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/go-postgres
 {
 	"name": "DouYinMall",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-
+// 	"mounts": [
+//     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+//   ],	
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 
